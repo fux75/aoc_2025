@@ -4,4 +4,5 @@
   <Project Path="Day2-Puzzle1/Day2-Puzzle1.csproj" Id="4b9f15e9-b8d7-4fba-b8ed-70c68c41e88b" />
   <Project Path="Day2-Puzzle2/Day2-Puzzle2.csproj" />
   <Project Path="Day3-Puzzle1/Day3-Puzzle1.csproj" Id="da861687-d93a-4223-aa15-3766623ea7ed" />
+  <Project Path="Day3-Puzzle2/Day3-Puzzle2.csproj" Id="7a15e8f7-4412-4770-ad8e-4e72b36fa4f7" />
 </Solution>
