@@ -11,17 +11,15 @@ public class Range
     {
         Range? Result = null;
 
-        if (aRange.LastId < FirstId)
+        if (aRange.LastId < FirstId - 1)
             return Result;
-        if (aRange.FirstId > LastId)
+        if (aRange.FirstId > LastId + 1)
             return Result;
 
         return new Range(
             Math.Min(FirstId, aRange.FirstId),
             Math.Max(LastId, aRange.LastId));
     }
-
-    
 
     public override string ToString() => $"{FirstId}-{LastId} {IsMerged}";
 

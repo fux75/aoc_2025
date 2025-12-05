@@ -1,10 +1,15 @@
-﻿//var aInput = File.ReadAllLines("Input.txt");
+﻿var aInput = File.ReadAllLines("Input.txt");
 
-string[] aInput = [
-    "3-5",
-    "10-14",
-    "16-20",
-    "12-18"];
+////string[] aInput = [
+////    "544317206779688-544317206779688",
+////    "544317206779689-552355052009161"
+////];
+
+//string[] aInput = [
+//    "3-5",
+//    "10-14",
+//    "16-20",
+//    "12-18"];
 
 List<Range> aRanges = [];
 foreach (var aRangeString in aInput)
@@ -15,41 +20,34 @@ foreach (var aRangeString in aInput)
     aRanges.Add(new Range(aFirst, aLast));
 }
 
+aRanges = aRanges.OrderBy(r => r.FirstId).ToList();
+
 var aResultingRanges = new List<Range>();
-for (var aOuterIndex = 0; aOuterIndex < aRanges.Count; aOuterIndex++)
+var aCurrentIndex = 0;
+while (aCurrentIndex < aRanges.Count - 1)
 {
-    var aOuterRange = aRanges[aOuterIndex];
-
-    if (aOuterRange.IsMerged)
-        continue;
-
-    aOuterRange.IsMerged = true;
-
-    var aCurrentRange = new Range(aOuterRange);
-    aCurrentRange.IsMerged = true;
-
-    for (var aInnerIndex = 0; aInnerIndex < aRanges.Count; aInnerIndex++)
+    var aCurrentRange = aRanges[aCurrentIndex];
+    var aNextRange = aRanges[aCurrentIndex + 1];
+    while (aNextRange.FirstId <= aCurrentRange.LastId + 1) 
     {
-        var aInnerRange = aRanges[aInnerIndex];
-        if (aInnerRange.Equals(aCurrentRange))
-            continue;
-
-        var aRange = aCurrentRange.GetOverlap(aInnerRange);
-        if (aRange == null)
-            continue;
-
-        aCurrentRange = aRange;
-        aInnerRange.IsMerged = true;
+        aCurrentRange.LastId = Math.Max(aCurrentRange.LastId, aNextRange.LastId);
+        aRanges.RemoveAt(aCurrentIndex + 1);
+        if (aCurrentIndex == aRanges.Count - 1)
+            break;
+        aNextRange = aRanges[aCurrentIndex + 1];
     }
-    aResultingRanges.Add(aCurrentRange);
+    aCurrentIndex++;
 }
 
-foreach (var aRange in aResultingRanges)
+ulong aTotalFreshIngredients = 0;
+foreach (var aRange in aRanges)
 {
-    Console.WriteLine($"{aRange.FirstId} - {aRange.LastId}");
+    aTotalFreshIngredients += aRange.LastId - aRange.FirstId + 1;
+    Console.WriteLine($"{aRange.FirstId}-{aRange.LastId}-{aRange.LastId - aRange.FirstId + 1}");
 }
 
-
+Console.WriteLine($"{aRanges.Count} resulting ranges");
+Console.WriteLine($"{aTotalFreshIngredients} total fresh ingredients");
 
 Console.WriteLine("[ENTER]");
 Console.ReadLine();
