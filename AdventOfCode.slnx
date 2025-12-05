@@ -7,4 +7,6 @@
   <Project Path="Day3-Puzzle2/Day3-Puzzle2.csproj" Id="7a15e8f7-4412-4770-ad8e-4e72b36fa4f7" />
   <Project Path="Day4-Puzzle1/Day4-Puzzle1.csproj" Id="6f18151f-314a-415e-8fef-894539feb7ac" />
   <Project Path="Day4-Puzzle2/Day4-Puzzle2.csproj" Id="fcd7657b-5fd3-400e-9579-6fdee49c6efc" />
+  <Project Path="Day5-Puzzle1/Day5-Puzzle1.csproj" Id="bf3c30c2-f5b4-454e-9b76-33f5c96b5662" />
+  <Project Path="Day5-Puzzle2/Day5-Puzzle2.csproj" Id="24e874f2-b7f1-4e69-9e89-8e371d0ce379" />
 </Solution>
