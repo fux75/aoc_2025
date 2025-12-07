@@ -11,4 +11,6 @@
   <Project Path="Day5-Puzzle2/Day5-Puzzle2.csproj" Id="24e874f2-b7f1-4e69-9e89-8e371d0ce379" />
   <Project Path="Day6-Puzzle1/Day6-Puzzle1.csproj" Id="4f25ae7b-9b25-4df7-8131-ce775fa7f8cb" />
   <Project Path="Day6-Puzzle2/Day6-Puzzle2.csproj" Id="7a2c2fbf-39cc-41a0-938e-88f3e3b3ba65" />
+  <Project Path="Day7-Puzzle1/Day7-Puzzle1.csproj" Id="ae40b1c7-bf54-49a1-a804-f11d453c917e" />
+  <Project Path="Day7-Puzzle2/Day7-Puzzle2.csproj" Id="61ed5f7a-2785-4645-bb1f-5892388b0a52" />
 </Solution>
