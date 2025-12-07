@@ -1,51 +1,58 @@
-﻿//var aInput = File.ReadLines("Input.txt").ToList().Where(aLine => aLine.Any(s => s == 'S' || s == '^')).ToList();
-var aInput = File.ReadLines("Sample.txt").ToList().Where(aLine => aLine.Any(s => s == 'S' || s == '^')).ToList();
+﻿// daten lesen und "..." Zeilen entfernen
+var aInput = File.ReadLines("Input.txt").ToList().Where(aLine => aLine.Any(s => s == 'S' || s == '^')).ToList();
 
 
-var aBeamColumns = new Dictionary<int, int>();
-aBeamColumns.Add(aInput[0].IndexOf('S'), 1);
+// "Sicherheitsspalte" vorne und hinten anhängen
+for (var aRowIndex = 0; aRowIndex < aInput.Count; aRowIndex++)
+    aInput[aRowIndex] = $".{aInput[aRowIndex]}.";
+
+// das Array enthält in jeder Zelle, wie oft sie beim Durchqueren eines Tachyons erreicht wird
+ulong[,] aGrid = new ulong[aInput.Count, aInput[0].Length];
+
+// Initialisierung mit dem ersten Tachyon
+aGrid[0, aInput[0].IndexOf("S")] = 1;
+// erste Zeile entfernen, macht die Zählung und Indizierung leichter
 aInput.RemoveAt(0);
-var aBeamColumnList = new List<Dictionary<int, int>>();
 
+// Alle zeilen durchgehen
 for (var aRowIndex = 0; aRowIndex < aInput.Count; aRowIndex++)
 {
-    var aRow = aInput[aRowIndex];
-    var aSplitterColumns = GetSplitterColumns(aRow);
-    Console.WriteLine($"Processing row {aRowIndex + 1} / {aInput.Count}, current paths: {aBeamColumns.Values.Sum()} - Splitter columns: {aSplitterColumns.Count}");
+    // Ermitteln, an welchen Stellen sich Splitter befinden
+    var aSplitterColumns = GetSplitterColumns(aInput[aRowIndex]);
 
-    var aColumns = new List<int>(aBeamColumns.Keys);
-    //aBeamColumnList.Add(aColumns);
-
-    foreach (var aBeamColumn in aColumns)
+    // Im Array für die aktuelle Zeile alle Spalten durchgehen
+    for (var aColumnIndex = 0; aColumnIndex < aInput[aRowIndex].Length; aColumnIndex++)
     {
-        if (aSplitterColumns.Contains(aBeamColumn))
+        // Steht an der Stelle schon ein Wert größer 0 (also wurde diese Zelle schon erreicht)?
+        if (aGrid[aRowIndex, aColumnIndex] > 0)
         {
-            // Originalbeam entfernen
-            aBeamColumns[aBeamColumn] = aBeamColumns[aBeamColumn] - 1;
-            if(aBeamColumns[aBeamColumn] == 0)
-                aBeamColumns.Remove(aBeamColumn);
-
-            if (!aBeamColumns.ContainsKey(aBeamColumn - 1))
-                aBeamColumns.Add(aBeamColumn - 1, 1);
+            if (aSplitterColumns.Contains(aColumnIndex))
+            {
+                // Die aktuelle Zelle ist ein Splitter -> neue Wege nach unten links und unten rechts erzeugen
+                // Zellen unten links und rechts um den Wert der aktuellen Zelle erhöhen
+                aGrid[aRowIndex + 1, aColumnIndex - 1] = aGrid[aRowIndex + 1, aColumnIndex - 1] + aGrid[aRowIndex, aColumnIndex];
+                aGrid[aRowIndex + 1, aColumnIndex + 1] = aGrid[aRowIndex + 1, aColumnIndex + 1] + aGrid[aRowIndex, aColumnIndex];
+            }
             else
-                aBeamColumns[aBeamColumn - 1] = aBeamColumns[aBeamColumn - 1] * 2;
-
-            if (!aBeamColumns.ContainsKey(aBeamColumn + 1))
-                aBeamColumns.Add(aBeamColumn + 1, 1);
-            else
-                aBeamColumns[aBeamColumn + 1] = aBeamColumns[aBeamColumn + 1] * 2;
+            {
+                // Kein Splitter -> Weg gerade nach unten fortsetzen
+                // Zelle darunter um den Wert der aktuellen Zelle erhöhen
+                aGrid[aRowIndex + 1, aColumnIndex] = aGrid[aRowIndex + 1, aColumnIndex] + aGrid[aRowIndex, aColumnIndex];
+            }
         }
     }
 }
 
-//var aSum = 0;
-//foreach (var aBeamColumnListEntry in aBeamColumnList)
-//{
-//    aSum += aBeamColumnListEntry.Values.Sum();
-//}
+// In der letzten Zeile alle Zellen aufsummieren
+// Das wären alle möglichen Wege von oben nach unten
+// In einem Baum wären das alle Wege von jedem Blatt zur Wurzel
+ulong aTotalPaths = 0;
+for (var aColumnIndex = 0; aColumnIndex < aGrid.GetLength(1); aColumnIndex++)
+{
+    aTotalPaths += aGrid[aGrid.GetLength(0) - 1, aColumnIndex];
+}
 
-
-Console.WriteLine($"Total paths: {aBeamColumns.Values.Sum()}");
+Console.WriteLine($"Total Paths: {aTotalPaths}");
 Console.WriteLine("[ENTER]");
 Console.ReadLine();
 
