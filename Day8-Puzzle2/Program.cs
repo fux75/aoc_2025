@@ -18,10 +18,10 @@ while (aCircuts.Count > 1)
     // Kleinste Distanz herausfinden
     aMinDistance = aDistances.Min(kvp => kvp.Value);
     var aBoxPair = aDistances.First(kvp => kvp.Value == aMinDistance).Key;
-    
+
     // Diese Kombination entfernen
     aDistances.Remove(aBoxPair);
-    
+
     // Falls es die letzten sind, die angefasst werden, bevor die Schleife abbricht
     // Abstand merken
     aProduct = (ulong)aBoxPair.Box1.x * (ulong)aBoxPair.Box2.x;
